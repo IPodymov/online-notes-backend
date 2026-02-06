@@ -32,4 +32,14 @@ class InMemoryUserRepository implements UserRepository {
       return null;
     }
   }
+
+  @override
+  Future<User> updateUser(User user) async {
+    final index = _users.indexWhere((u) => u.id == user.id);
+    if (index != -1) {
+      _users[index] = user;
+      return user;
+    }
+    throw Exception('User not found');
+  }
 }

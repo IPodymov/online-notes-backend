@@ -8,9 +8,11 @@ import 'package:mongo_dart/mongo_dart.dart'; // Add mongo_dart
 import 'package:shelf_cors_headers/shelf_cors_headers.dart'; // Add shelf_cors_headers
 import 'package:electronic_document_management_backend/data/repositories/in_memory_user_repository.dart';
 import 'package:electronic_document_management_backend/data/repositories/in_memory_note_repository.dart';
+import 'package:electronic_document_management_backend/data/repositories/in_memory_invitation_repository.dart';
 import 'package:electronic_document_management_backend/services/user_service.dart';
 import 'package:electronic_document_management_backend/services/note_service.dart';
 import 'package:electronic_document_management_backend/services/auth_service.dart';
+import 'package:electronic_document_management_backend/services/invitation_service.dart';
 import 'package:electronic_document_management_backend/api/controllers/user_controller.dart';
 import 'package:electronic_document_management_backend/api/controllers/note_controller.dart';
 
@@ -35,14 +37,17 @@ void main(List<String> args) async {
   // 1. Initialize Data Layer
   final userRepository = InMemoryUserRepository();
   final noteRepository = InMemoryNoteRepository();
+  final invitationRepository = InMemoryInvitationRepository();
 
   // 2. Initialize Service Layer
   final userService = UserService(userRepository);
   final noteService = NoteService(noteRepository);
   final authService = AuthService();
+  final invitationService = InvitationService(invitationRepository);
 
   // 3. Initialize API Layer (Controllers)
-  final userController = UserController(userService, authService);
+  final userController =
+      UserController(userService, authService, invitationService);
   final noteController = NoteController(noteService);
 
   // Define routes

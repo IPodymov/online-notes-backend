@@ -38,4 +38,19 @@ class UserService {
   Future<User?> getUser(String id) {
     return _userRepository.getUserById(id);
   }
+
+  Future<User> updateUserRole(String userId, UserRole newRole) async {
+    final user = await _userRepository.getUserById(userId);
+    if (user == null) {
+      throw Exception('User not found');
+    }
+    final updatedUser = User(
+      id: user.id,
+      username: user.username,
+      password: user.password,
+      name: user.name,
+      role: newRole,
+    );
+    return await _userRepository.updateUser(updatedUser);
+  }
 }

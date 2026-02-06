@@ -9,18 +9,29 @@ lib/
 ├── domain/                    # Ядро приложения (независимо от фреймворков)
 │   ├── models/               # Бизнес-объекты
 │   │   ├── user.dart         # Модель пользователя
+│   │   ├── invitation.dart   # Модель приглашения
 │   │   └── note.dart         # Модель записки
 │   └── repositories/          # Абстрактные интерфейсы
 │       ├── user_repository.dart
-│       └── note_repository.dart
+│       ├── note_repository.dart
+│       └── invitation_repository.dart
 │
 ├── data/                      # Реализация доступа к данным
-│   └── repositories/          # Конкретные реализации репозиториев
-│       ├── in_memory_user_repository.dart
-│       └── in_memory_note_repository.dart
+│   ├── database/             # Управление подключением к БД
+│   │   └── database_service.dart
+│   ├── migrations/           # Миграции базы данных
+│   │   ├── user_migration.dart
+│   │   ├── note_migration.dart
+│   │   └── invitation_migration.dart
+│   ├── repositories/         # Конкретные реализации репозиториев
+│   │   ├── mongo_user_repository.dart
+│   │   ├── in_memory_user_repository.dart
+│   │   └── ...
+│   └── models/               # (Optional) Модели данных БД
 │
 ├── services/                  # Бизнес-логика приложения
 │   ├── user_service.dart     # Логика управления пользователями
+│   ├── invitation_service.dart # Управление приглашениями
 │   ├── note_service.dart     # Логика управления записками
 │   └── auth_service.dart     # Аутентификация и авторизация
 │

@@ -9,7 +9,7 @@
 - **URL**: `/users/register`
 - **Метод**: `POST`
 - **Заголовки**: `Content-Type: application/json`
-- **Тело запроса**:
+- **Тело запроса (вариант 1: обычная регистрация)**:
   ```json
   {
     "username": "teacher1",
@@ -18,19 +18,74 @@
     "role": "classTeacher"
   }
   ```
+- **Тело запроса (вариант 2: по приглашению)**:
+  ```json
+  {
+    "username": "student1",
+    "password": "password123",
+    "name": "Петр Петров",
+    "inviteToken": "d4e5f6g7-h8i9-j0k1-l2m3-n4o5p6q7r8s9"
+  }
+  ```
 - **Доступные роли**:
   - `admin` - системный администратор
   - `schoolAdmin` - администрация школы
   - `classTeacher` - классный руководитель
   - `parent` - родитель учащегося
   - `student` - учащийся
-- **Ответ при успехе (200)**:
+- **Ответ при успехе (201)**:
   ```json
   {
     "id": "uuid-пользователя",
     "username": "teacher1",
     "name": "Иван Иванович",
     "role": "classTeacher"
+  }
+  ```
+
+### Создание приглашения
+
+- **URL**: `/users/invite`
+- **Метод**: `POST`
+- **Доступ**: только `admin`, `schoolAdmin`, `classTeacher`
+- **Тело запроса**:
+  ```json
+  {
+    "role": "student",
+    "senderRole": "classTeacher"
+  }
+  ```
+  _(Примечание: `senderRole` используется для симуляции проверки прав в текущей версии API)_
+- **Ответ при успехе (201)**:
+  ```json
+  {
+    "token": "d4e5f6g7-h8i9-j0k1-l2m3-n4o5p6q7r8s9",
+    "role": "student",
+    "isUsed": false,
+    "link": "http://localhost:8080/users/register?inviteToken=d4e5f6g7-h8i9-j0k1-l2m3-n4o5p6q7r8s9"
+  }
+  ```
+
+### Изменение роли пользователя
+
+- **URL**: `/users/{id}/role`
+- **Метод**: `PATCH`
+- **Доступ**: только `admin`, `schoolAdmin`, `classTeacher`
+- **Тело запроса**:
+  ```json
+  {
+    "role": "schoolAdmin",
+    "senderRole": "admin"
+  }
+  ```
+  _(Примечание: `senderRole` используется для симуляции проверки прав в текущей версии API)_
+- **Ответ при успехе (200)**:
+  ```json
+  {
+    "id": "uuid-пользователя",
+    "username": "teacher1",
+    "name": "Иван Иванович",
+    "role": "schoolAdmin"
   }
   ```
 
